@@ -1,7 +1,7 @@
 module.exports = function(sequelize, DataTypes) {
     var Teacher = sequelize.define('Teacher', {
-        username = DataTypes.STRING,
-        name = DataTypes.STRING
+        username: DataTypes.STRING,
+        name: DataTypes.STRING
     }, {
         classMethods: {
             associate: function(models) {

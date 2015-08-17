@@ -2,6 +2,7 @@ var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
+  , redis = require('redis')
   , RedisStore = require('connect-redis')(express)
   , passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy
@@ -43,11 +44,11 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-passport.serializer(function(user, done) {
+passport.serializeUser(function(user, done) {
   done(null, user.id)
 })
 
-passport.deserializer(function(id, done) {
+passport.deserializeUser(function(id, done) {
   db.Teacher.findById({where: {id: id}}).then(function(teacher, err) {
     done(null, teacher)
   }).catch(function(err){
