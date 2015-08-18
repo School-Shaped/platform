@@ -1,6 +1,5 @@
 var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
+  , routes = require('./routes')  
   , http = require('http')
   , redis = require('redis')
   , RedisStore = require('connect-redis')(express)
@@ -33,6 +32,7 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(express.cookieParser());
   app.use(session);
   app.use(passport.initialize());
   app.use(passport.session());
@@ -57,7 +57,7 @@ passport.deserializeUser(function(id, done) {
 })
 
 passport.use(new LocalStrategy(function(username, password, done){
-  db.Teacher.findOne({where: {password_hash: password}}).then(function(teacher){
+  db.Teacher.findOne({where: {username: username, passwordHash: password}}).then(function(teacher){
     if (teacher) {
       done(null, teacher)
     } else {
@@ -68,21 +68,49 @@ passport.use(new LocalStrategy(function(username, password, done){
   }) 
 }))
 
-app.get('/', routes.index);
-app.post("/login", passport.authenticate('local'));
+app.post("/login", passport.authenticate('local', {
+  successRedirect: "/",
+  failureRedirect: "/login?err=problem+authenticating"
+}));
+
 app.post("/teacher", function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
 
-  db.Teacher.create({username: username, password_hash: password}).then(function(user){
-    req.login(user)
-    res.redirect("/")
-  })
+  console.log("password", password)
+
+  db.Teacher.findOne({where: {username: username}}).then(function(user) {
+    if (user) {
+      res.redirect("/teacher/create?err=user+already+exists")
+    } else{
+      db.Teacher.create({username: username, passwordHash: password}).then(function(user){
+        req.login(user, function(err) {
+          res.send(err, 500)
+        })
+        res.redirect("/")
+      }).catch(function(err) {
+        res.send(err, 500)
+      })    
+    }
+  }) 
 })
 
-app.get("/teacher/:id", function(req, res) {
-  var id = req.param.id
-  res.send("id is " + id, 200)
+app.get("/login", function(req, res) {
+  res.render("login");
+})
+
+app.get("/teacher/create", function(req, res) {
+  res.render("create-teacher");
+})
+
+app.get("/", function(req, res) {
+  user = req.user;
+  if (!user) {
+    res.redirect("/login")
+    return
+  }
+
+  res.send("id is " + user.id, 200)
 })
 
 http.createServer(app).listen(app.get('port'), function(){

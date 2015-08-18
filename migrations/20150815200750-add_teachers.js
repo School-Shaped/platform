@@ -19,9 +19,9 @@ module.exports = {
           allowNull: false
         },
         name: {
-    	  type: DataTypes.STRING          
-        }
-        password_hash: {
+    	  	type: DataTypes.STRING          
+        },
+        passwordHash: {
     			type: DataTypes.STRING,
           allowNull: false		
         }

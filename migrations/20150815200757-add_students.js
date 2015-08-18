@@ -19,8 +19,7 @@ module.exports = {
           allowNull: false
         },
         name: {
-    	  type: DataTypes.STRING,
-          allowNull: false	
+    	  type: DataTypes.STRING          
         },
         TeacherId:  {
           type: DataTypes.BIGINT,
@@ -29,7 +28,7 @@ module.exports = {
           onUpdate: "CASCADE",
           onDelete: "RESTRICT"
         },
-        password_hash: {
+        passwordHash: {
     			type: DataTypes.STRING,
           allowNull: false		
         }
