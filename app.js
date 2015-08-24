@@ -1,11 +1,14 @@
 var express = require('express')
   , routes = require('./routes')  
+  , teachers = require('./routes/teachers')  
   , http = require('http')
   , redis = require('redis')
   , RedisStore = require('connect-redis')(express)
   , passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy
   , db   = require('./models')
+  , bcrypt = require('bcrypt-as-promised')
+  , flash = require('connect-flash')
   , path = require('path');  
 
 var app = express();
@@ -38,62 +41,59 @@ app.configure(function(){
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
+  app.use(flash());
 });
 
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function(user, done) {  
+  console.log("user is ", user);
   done(null, user.id)
 })
 
-passport.deserializeUser(function(id, done) {
-  db.Teacher.findById({where: {id: id}}).then(function(teacher, err) {
-    done(null, teacher)
+passport.deserializeUser(function(id, done) {  
+  db.Teacher.findById(id).then(function(teacher, err) {
+    return done(null, teacher)
   }).catch(function(err){
-    done(err)
+    return done(err)
   })
 })
 
 passport.use(new LocalStrategy(function(username, password, done){
-  db.Teacher.findOne({where: {username: username, passwordHash: password}}).then(function(teacher){
-    if (teacher) {
-      done(null, teacher)
-    } else {
-      done(null, false, { message: "user name or password incorrect" })
-    }
-  }).catch(function(err){
-    done(err)
+  console.log("using the strat");
+
+  db.Teacher.findOne({where: {username: username}}).then(function(teacher){
+    console.log("teacher", teacher);
+    if (!teacher) {
+      done(null, false, { message: "user not found" })
+    }    
+
+    bcrypt.compare(password, teacher.passwordHash).then(function(res, err) { 
+      if (err) {
+        done(err, false, { message: "user not found" })
+      }
+
+      if (res) {
+        return done(null, teacher)
+      } else {
+        return done(null, false, { message: "password incorrect" })
+      }  
+    })
+  }).catch(function(err) {
+    console.log("Error", err);
+    return done(err)
   }) 
 }))
 
 app.post("/login", passport.authenticate('local', {
   successRedirect: "/",
-  failureRedirect: "/login?err=problem+authenticating"
+  failureRedirect: "/login?err=problem+authenticating",
+  failureFlash: true
 }));
 
-app.post("/teacher", function(req, res) {
-  var username = req.body.username;
-  var password = req.body.password;
-
-  console.log("password", password)
-
-  db.Teacher.findOne({where: {username: username}}).then(function(user) {
-    if (user) {
-      res.redirect("/teacher/create?err=user+already+exists")
-    } else{
-      db.Teacher.create({username: username, passwordHash: password}).then(function(user){
-        req.login(user, function(err) {
-          res.send(err, 500)
-        })
-        res.redirect("/")
-      }).catch(function(err) {
-        res.send(err, 500)
-      })    
-    }
-  }) 
-})
+app.post("/teacher", teachers.create)
 
 app.get("/login", function(req, res) {
   res.render("login");
@@ -104,7 +104,7 @@ app.get("/teacher/create", function(req, res) {
 })
 
 app.get("/", function(req, res) {
-  user = req.user;
+  user = req.user;  
   if (!user) {
     res.redirect("/login")
     return

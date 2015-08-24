@@ -15,6 +15,9 @@
     "lodash": "*",
     "connect-redis": "1.4.7",
     "passport-local": "*",
-    "passport": "*"
+    "passport": "*",
+    "bcrypt-as-promised": "*",
+    "node-gyp": "*",
+    "connect-flash": "*"
   }
 }
