@@ -36,12 +36,12 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser());
+  app.use(flash());
   app.use(session);
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
-  app.use(flash());
+  app.use(express.static(path.join(__dirname, 'public')));  
 });
 
 app.configure('development', function(){
@@ -67,22 +67,15 @@ passport.use(new LocalStrategy(function(username, password, done){
   db.Teacher.findOne({where: {username: username}}).then(function(teacher){
     console.log("teacher", teacher);
     if (!teacher) {
-      done(null, false, { message: "user not found" })
+      return done(null, false, { message: "User not found" })
     }    
 
-    bcrypt.compare(password, teacher.passwordHash).then(function(res, err) { 
-      if (err) {
-        done(err, false, { message: "user not found" })
-      }
-
-      if (res) {
-        return done(null, teacher)
-      } else {
-        return done(null, false, { message: "password incorrect" })
-      }  
-    })
-  }).catch(function(err) {
-    console.log("Error", err);
+    bcrypt.compare(password, teacher.passwordHash).then(function(res) {       
+      return done(null, teacher)    
+    }).catch(function(err){
+      done(null, false, { message: "Password incorrect" })
+    });    
+  }).catch(function(err) {    
     return done(err)
   }) 
 }))
@@ -95,8 +88,8 @@ app.post("/login", passport.authenticate('local', {
 
 app.post("/teacher", teachers.create)
 
-app.get("/login", function(req, res) {
-  res.render("login");
+app.get("/login", function(req, res) {    
+  res.render("login", { message: req.flash("error") });
 })
 
 app.get("/teacher/create", function(req, res) {
@@ -106,8 +99,7 @@ app.get("/teacher/create", function(req, res) {
 app.get("/", function(req, res) {
   user = req.user;  
   if (!user) {
-    res.redirect("/login")
-    return
+    return res.redirect("/login")
   }
 
   res.send("id is " + user.id, 200)
