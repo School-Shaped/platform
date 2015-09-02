@@ -1,5 +1,3 @@
-# A platform for education app prototypes created by School Shaped
-
 # Geting started:
 run server locally:
 redis-server
