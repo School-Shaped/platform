@@ -10,15 +10,15 @@ Migrate DB on heroku:
 heroku run bash
 sequelize -m -e production
 
-# What is edapps?
-Edapps is a platform for development education software prototypes. It provides two benefits: 1) A centralized and secure teacher and student login system 2) Easy distribution of apps, and collection of feedback.
+# What is this platform?
+The School Shaped platform is for development and distribution of education software prototypes. It provides two benefits: 1) A centralized and secure teacher and student login system 2) Easy distribution of apps, and collection of feedback.
 
 Using edapps a teacher can log in, and view a dashboard of all the apps available for use. From the dashboard they can start an app, and the app will have access to all their user data (name, subject, students, or anything else).
 
-# Developing on edapps
+# Developing
 
-## Edapps is under construction!
-Right now edapps allows teachers to create accounts and log in. However, there is no dashboard for displaying the available apps yet. There is also no concept of an "app" in the database, which means there is now way for us to receive feedback for an app. Build team, your mission: Create the dashboard for displaying all the available apps, and a way to collect feedback through the website for a specific app. The overview below will give you a sense for how edapps works. If you have any questions which you can't figure out, shoot me an email or ping me on slack (between the hours of 8-11 AM or PM for the next two weeks). 
+## We're Under construction!
+Right this app allows teachers to create accounts and log in. However, there is no dashboard for displaying the available apps yet. There is also no concept of an "app" in the database, which means there is now way for us to receive feedback for an app. Build team, your mission: Create the dashboard for displaying all the available apps, and a way to collect feedback through the website for a specific app. The overview below will give you a sense for how edapps works. If you have any questions which you can't figure out, shoot me an email or ping me on slack. 
 
 ## Overview
 
