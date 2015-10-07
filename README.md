@@ -13,24 +13,27 @@ sequelize -m -e production  (or) sequelize-cli -m -e production
 
 
 # What is this platform?
-The School Shaped platform is for development and distribution of education software prototypes. It provides two benefits: 1) A centralized and secure teacher and student login system 2) Easy distribution of apps, and collection of feedback.
+The School Shaped platform is for development and distribution of education software prototypes. It provides two benefits:  
+1) A centralized and secure teacher and student login system 
+2) Easy distribution of apps, and collection of feedback
 
-Using edapps a teacher can log in, and view a dashboard of all the apps available for use. From the dashboard they can start an app, and the app will have access to all their user data (name, subject, students, or anything else).
+Using edapps a teacher can log in and view a dashboard of all the apps available for use. From the dashboard they can start an app, and the app will have access to all their user data (name, subject, students, or anything else).
 
 # Developing
 
-## We're Under construction!
-Right this app allows teachers to create accounts and log in. However, there is no dashboard for displaying the available apps yet. There is also no concept of an "app" in the database, which means there is now way for us to receive feedback for an app. Build team, your mission: Create the dashboard for displaying all the available apps, and a way to collect feedback through the website for a specific app. The overview below will give you a sense for how edapps works. If you have any questions which you can't figure out, shoot me an email or ping me on slack. 
+## We're under construction!
+Right now this app allows teachers to create accounts and log in. However, there is no dashboard for displaying the available apps yet. There is also no concept of an "app" in the database, which means there is no way for us to receive feedback for an app.  
+Build team, your mission: Create the dashboard for displaying all the available apps, and a way to collect feedback through the website for a specific app. The overview below will give you a sense for how edapps works. If you have any questions which you can't figure out, shoot me an email or ping me on slack. 
 
 ## Overview
 
-Edapps is an express 3 app. Express is a web framework written in Javascript. It provides all the the important things you need to build a website. The three we care about most are 
+Edapps is an Express 3 app. Express is a web framework written in Javascript. It provides all the the important things you need to build a website. The three we care about most are 
 
 1. Routing
 2. Session storage
 3. Request and response parsing/rendering
 
-I'll just quickly go over weach of these components, and how express handles them. If you want more detail, check out the excellent [Olin.js lesson on express](https://github.com/olinjs/olinjs/tree/master/lessons/03-express-templates-mongo). 
+I'll just quickly go over each of these components, and how Express handles them. If you want more detail, check out the excellent [Olin.js lesson on express](https://github.com/olinjs/olinjs/tree/master/lessons/03-express-templates-mongo). 
 
 ### Routing
 
@@ -228,11 +231,11 @@ module.exports = function(sequelize, DataTypes) {
 
 This model defines a javascript class which has the fields username, name and passwordHash, which can be populated based on the "Teachers" table. A couple things to note: 
 
-First, the first argument to the model is "Teacher", whereas the table name we defined in our migration was "Teachers" (with an s). This is no mistake. Sequelize does some magic to make naming easier. One of it's less sensible pieces of magic is adding an "s" on to the table name argument passed into sequelize.define. 
+First, the first argument to the model is "Teacher", whereas the table name we defined in our migration was "Teachers" (with an s). This is no mistake. Sequelize does some magic to make naming easier. One of its less sensible pieces of magic is adding an "s" on to the table name argument passed into sequelize.define. 
 
 Second, we have no createdAt or updatedAt fields in this model, although those were defined in the migration. Again, this is no mistake. Sequelize automatically defines a createdAt and updatedAt field in every model, and sets those automatically when creating and updating rows. 
 
-Third, there is block of code:
+Third, there is a block of code:
 ``` javascript
 associate: function(models) {
                 Teacher.hasMany(models.Student, {foreignKey: "TeacherId"})
