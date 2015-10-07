@@ -4,12 +4,13 @@ redis-server
 foreman start -f Procfile.dev -e devel.env (Mac)  
 nf start -f Procfile.dev -e devel.env (Ubuntu)  
 
-create a new migration
-sequelize -c
+**create a new migration**  
+sequelize -c (or) sequelize-cli -c
 
-Migrate DB on heroku:
-heroku run bash
-sequelize -m -e production
+**Migrate DB on heroku:**
+heroku run bash  
+sequelize -m -e production  (or) sequelize-cli -m -e production
+
 
 # What is this platform?
 The School Shaped platform is for development and distribution of education software prototypes. It provides two benefits: 1) A centralized and secure teacher and student login system 2) Easy distribution of apps, and collection of feedback.
