@@ -1,4 +1,4 @@
-# Geting started:
+# Getting started:
 **run server locally:**  
 redis-server  
 foreman start -f Procfile.dev -e devel.env (Mac)  
