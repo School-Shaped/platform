@@ -33,9 +33,9 @@ module.exports = {
           allowNull: false		
         }
       }
-    ).complete(done);
+    );
   },
   down: function(migration, DataTypes, done) {
-    migration.dropTable('Students').complete(done);
+    migration.dropTable('Students');
   }  
 }

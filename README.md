@@ -4,8 +4,10 @@ redis-server
 foreman start -f Procfile.dev -e devel.env (Mac)  
 nf start -f Procfile.dev -e devel.env (Ubuntu)  
 
+When developing, you're going to want to use Node, not Foreman. To use the proper environmental variables, type in "export" + each line of the devel.env file in the terminal before using 'node app.js.'
+
 **create a new migration**  
-sequelize -c (or) sequelize-cli -c
+sequelize -c
 
 **Migrate DB on heroku:**
 heroku run bash  
@@ -147,7 +149,29 @@ app.post("/apps", function(req, res) {
 ```
 
 ### Sequelize 
-Sequelize is an ORM (Objection-relational Mapping) for SQL like databases. If you want more information on ORMs or SQL-like databases, there's a ton of good guides online. For now, just know that we store all our data in a postgres database, and Sequelize is how we talk to postgres. Here's an overview of how sequelize works:
+Sequelize is an ORM (Objection-relational Mapping) for SQL like databases. If you want more information on ORMs or SQL-like databases, there's a ton of good guides online. For now, just know that we store all our data in a postgres database, and Sequelize is how we talk to postgres.
+
+Install PostgreSQL following these instructions: https://help.ubuntu.com/community/PostgreSQL.
+
+To get the edapps database set up:
+
+sudo -u postgres psql postgres  
+CREATE USER edapps PASSWORD 'develpass';  
+CREATE DATABASE edapps OWNER edapps;
+
+Try:  
+sequelize db:migrate
+
+If that doesn't work, try:  
+node_modules/.bin/sequelize db:migrate
+
+To make sure the migration worked:  
+psql edapps -U edapps -h localhost  
+Enter password (develpass)  
+Type \dt to see the list of tables - you should see tables for your models
+
+
+Here's an overview of how sequelize works.
 
 #### Migrations
 We store data in a SQL-like DB. This means that every piece of data must abide by a certain schema. A DB is similar to python dictionary, in that it allows you to store key value pairs. However, a python dictionary allows you store whatever kind of keys and values you want, wherease a SQL-like DB is more strict. A SQL-like DB will only let you store data for which a schema is defined. A schema is just a description of a what a piece of data can look like. Schemas define two things: 1) A table name 2) column names. A table is a place where data of a certain type is stored. For instance, we have a table for all the teachers and a table for all the apps. A table can be imagined like an actual 2D array, where there are columns and rows. Each row in a table is a different piece of data, a different teacher or app. Each column is a different field on each user or app. A schema defines a table name, like Teachers, and then the names for each column like teacher name, subject area, etc, and well as the type of each column, String, Integer, Boolean, Datatime etc. Once a schema is defined we need to let the database know about the new schema, so we can store data abiding by that schema. To do this we create a "Migration". A migration is a file which, when executed using the Sequelize toolkit, creates or modifies a schema in a DB. In sequelize a migration looks like:
@@ -284,3 +308,13 @@ db.Teacher.findOne({where: {username: username}}).then(function(teacher){
 ## Adding a new app 
 
 Under construction! We'll finish this once we finish the eddapps base. 
+
+
+# Troubleshooting
+
+**1. Help! The server was working yesterday but it isn't anymore.**  
+You may need to kill the server. Try:  
+ps aux | grep redis
+Find the PID (it's probably a 3-5 digit number) for redis (if there is one). Type:  
+sudo kill {PID here}  
+Then you should be able to restart everything as highlighted at the top of this README.

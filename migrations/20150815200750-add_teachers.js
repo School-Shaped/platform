@@ -26,9 +26,9 @@ module.exports = {
           allowNull: false		
         }
       }
-    ).complete(done);
+    );
   },
   down: function(migration, DataTypes, done) {
-    migration.dropTable('Teachers').complete(done);
+    migration.dropTable('Teachers');
   }  
 }
