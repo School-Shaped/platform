@@ -1,7 +1,7 @@
 module.exports = {
   up: function(migration, DataTypes, done) {
     migration.createTable(
-      'Teachers',
+      'Users',
       {
         id: {
           type: DataTypes.BIGINT,
@@ -18,17 +18,27 @@ module.exports = {
           type: DataTypes.STRING,
           allowNull: false
         },
-        name: {
-    	  	type: DataTypes.STRING          
+        fullname: {
+    	  	type: DataTypes.STRING,       
         },
         passwordHash: {
     			type: DataTypes.STRING,
           allowNull: false		
+        },
+        usertype: {
+          type: DataTypes.ENUM(0,4),
+        },
+        UserId: {
+          type: DataTypes.BIGINT,
+          model: "Users",
+          key: "id",
+          onUpdate: "CASCADE",
+          onDelete: "RESTRICT"
         }
       }
     );
   },
   down: function(migration, DataTypes, done) {
-    migration.dropTable('Teachers');
+    migration.dropTable('Users');
   }  
 }

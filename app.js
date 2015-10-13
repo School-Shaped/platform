@@ -1,6 +1,6 @@
 var express = require('express')
   , routes = require('./routes')  
-  , teachers = require('./routes/teachers')  
+  , teachers = require('./routes/teachers')
   , http = require('http')
   , redis = require('redis')
   , RedisStore = require('connect-redis')(express)
@@ -54,7 +54,7 @@ passport.serializeUser(function(user, done) {
 })
 
 passport.deserializeUser(function(id, done) {  
-  db.Teacher.findById(id).then(function(teacher, err) {
+  db.User.findById(id).then(function(teacher, err) {
     return done(null, teacher)
   }).catch(function(err){
     return done(err)
@@ -64,7 +64,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new LocalStrategy(function(username, password, done){
   console.log("using the strat");
 
-  db.Teacher.findOne({where: {username: username}}).then(function(teacher){
+  db.User.findOne({where: {username: username}}).then(function(teacher){
     console.log("teacher", teacher);
     if (!teacher) {
       return done(null, false, { message: "User not found" })

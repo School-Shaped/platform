@@ -306,7 +306,6 @@ db.Teacher.findOne({where: {username: username}}).then(function(teacher){
 ```
 
 ## Adding a new app 
-
 Under construction! We'll finish this once we finish the eddapps base. 
 
 

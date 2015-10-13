@@ -1,16 +1,27 @@
 extends layout
 
 block content
-	.container-fluid
-		.row.text-center
-			h2.col-md-4.col-md-offset-4 Create new teacher account
-		.row
-			.col-md-4.col-md-offset-4.text-center
-				form.login-form(action="/teacher" method="POST")
-					.form-group
-						label(for="username")
-						input.form-control#username(name="username" type=text placeholder="fun-username" maxLength="12")
-					.form-group
-						label(for="password")
-						input.form-control#password(name="password" type="password" placeholder="password" maxLength="24")
-					button.btn.btn-default(type="submit") Submit
+  .container-fluid
+    .row.text-center
+      h2.col-md-4.col-md-offset-4 Create new teacher account
+    .row
+      .col-md-4.col-md-offset-4.text-center
+        form.login-form(action="/teacher" method="POST")
+          .form-group
+            label(for="fullname")
+            input.form-control#fullname(name="fullname" type=text placeholder="name" maxLength="50")
+          .form-group
+            label(for="username")
+            input.form-control#username(name="username" type=text placeholder="fun-username" maxLength="12")
+          .form-group
+            label(for="password")
+            input.form-control#password(name="password" type="password" placeholder="password" maxLength="24") 
+          .form-group
+            label(for="usertype")
+            select.form-control#usertype(name="usertype" type="radio" placeholder="I am a...")
+              option(value="Teacher") Teacher
+              option(value="Student") Student
+              option(value="Builder") Builder
+              option(value="Administrator") Administrator
+              option(value="Other") Other
+          button.btn.btn-default(type="submit") Submit

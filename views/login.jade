@@ -1,21 +1,21 @@
 extends layout
 
 block content
-	.container-fluid		
-		.row
-			h4.col-md-4.col-md-offset-4.text-center.error #{message}
-		.row
-			h2.col-md-4.col-md-offset-4.text-center Teacher Login
-		.row
-			.col-md-4.col-md-offset-4.text-center
-				form.login-form(action="/login" method="POST")
-					.form-group
-						label(for="username") Username
-						input.form-control#username(name="username" type="text" placeholder="fun-username" maxLength="12")
-					.form-group
-						label(for="password") Password
-						input.form-control#password(name="password" type="password" placeholder="password" maxLength="24")					
-					button.btn.btn-default(type="submit") Submit
-		.row
-			a.col-md-4.col-md-offset-4.text-center.create-teacher-link(href="/teacher/create")
-				h4 Create a new account
+  .container-fluid    
+    .row
+      h4.col-md-4.col-md-offset-4.text-center.error #{message}
+    .row
+      h2.col-md-4.col-md-offset-4.text-center Teacher Login
+    .row
+      .col-md-4.col-md-offset-4.text-center
+        form.login-form(action="/login" method="POST")
+          .form-group
+            label(for="username") Username
+            input.form-control#username(name="username" type="text" placeholder="fun-username" maxLength="12")
+          .form-group
+            label(for="password") Password
+            input.form-control#password(name="password" type="password" placeholder="password" maxLength="24")  
+          button.btn.btn-default(type="submit") Submit
+    .row
+      a.col-md-4.col-md-offset-4.text-center.create-teacher-link(href="/teacher/create")
+        h4 Create a new account
