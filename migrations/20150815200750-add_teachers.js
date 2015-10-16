@@ -26,7 +26,7 @@ module.exports = {
           allowNull: false		
         },
         usertype: {
-          type: Sequelize.ENUM(0,4),
+          type: Sequelize.ENUM('Teacher','Student','Builder','Administrator','Other'),
         },
         UserId: {
           type: Sequelize.BIGINT,

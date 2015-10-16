@@ -6,19 +6,19 @@ exports.create = function(req, res) {
 	var fullname = req.body.fullname;
   var username = req.body.username;
   var password = req.body.password;
-  var usertitle = req.body.usertype;
+  var usertype = req.body.usertype;
 
-  if (usertitle == "Teacher") {
-    var usertype = 0
-  } else if (usertitle == "Student") {
-    var usertype = 1
-  } else if (usertitle == "Builder") {
-    var usertype = 2
-  } else if (usertitle == "Administrator") {
-    var usertype = 3
-  } else if (usertitle == "Other") {
-    var usertype = 4
-  }
+  // if (usertitle == "Teacher") {
+  //   var usertype = 0
+  // } else if (usertitle == "Student") {
+  //   var usertype = 1
+  // } else if (usertitle == "Builder") {
+  //   var usertype = 2
+  // } else if (usertitle == "Administrator") {
+  //   var usertype = 3
+  // } else if (usertitle == "Other") {
+  //   var usertype = 4
+  // }
 
   console.log(fullname, username, password, usertype);
 
