@@ -89,7 +89,8 @@ app.post("/login", passport.authenticate('local', {
 app.post("/teacher", teachers.create)
 
 app.get("/login", function(req, res) {    
-  res.render("login", { message: req.flash("error") });
+  res.render("login", { message: "fix me" });
+  // res.render("login", { message: req.flash("error") });
 })
 
 app.get("/teacher/create", function(req, res) {

@@ -1,35 +1,35 @@
 module.exports = {
-  up: function(migration, DataTypes, done) {
-    migration.createTable(
+  up: function(queryInterface, Sequelize) {
+    queryInterface.createTable(
       'Users',
       {
         id: {
-          type: DataTypes.BIGINT,
+          type: Sequelize.BIGINT,
           primaryKey: true,
           autoIncrement: true
         },
         createdAt: {
-          type: DataTypes.DATE
+          type: Sequelize.DATE
         },
         updatedAt: {
-          type: DataTypes.DATE
+          type: Sequelize.DATE
         },
         username: {
-          type: DataTypes.STRING,
+          type: Sequelize.STRING,
           allowNull: false
         },
         fullname: {
-    	  	type: DataTypes.STRING,       
+    	  	type: Sequelize.STRING,       
         },
         passwordHash: {
-    			type: DataTypes.STRING,
+    			type: Sequelize.STRING,
           allowNull: false		
         },
         usertype: {
-          type: DataTypes.ENUM(0,4),
+          type: Sequelize.ENUM(0,4),
         },
         UserId: {
-          type: DataTypes.BIGINT,
+          type: Sequelize.BIGINT,
           model: "Users",
           key: "id",
           onUpdate: "CASCADE",
@@ -38,7 +38,7 @@ module.exports = {
       }
     );
   },
-  down: function(migration, DataTypes, done) {
-    migration.dropTable('Users');
+  down: function(queryInterface, Sequelize) {
+    queryInterface.dropTable('Users');
   }  
 }
