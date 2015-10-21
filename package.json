@@ -18,6 +18,8 @@
     "pg": "*",
     "pg-hstore": "*",
     "redis": "*",
-    "sequelize-cli": "*"
+    "sequelize-cli": "*",
+    "repl-promised": "*",
+    "repl": "*"
   }
 }

@@ -1,6 +1,6 @@
 var express = require('express')
   , routes = require('./routes')  
-  , teachers = require('./routes/teachers')
+  , users = require('./routes/users')
   , http = require('http')
   , redis = require('redis')
   , RedisStore = require('connect-redis')(express)
@@ -48,31 +48,27 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-passport.serializeUser(function(user, done) {  
-  console.log("user is ", user);
+passport.serializeUser(function(user, done) {    
   done(null, user.id)
 })
 
 passport.deserializeUser(function(id, done) {  
-  db.User.findById(id).then(function(teacher, err) {
-    return done(null, teacher)
+  db.User.findById(id).then(function(user, err) {
+    return done(null, user)
   }).catch(function(err){
     return done(err)
   })
 })
 
-passport.use(new LocalStrategy(function(username, password, done){
-  console.log("using the strat");
-
-  db.User.findOne({where: {username: username}}).then(function(teacher){
-    console.log("teacher", teacher);
-    if (!teacher) {
+passport.use(new LocalStrategy(function(username, password, done){  
+  db.User.findOne({where: {username: username}}).then(function(user){    
+    if (!user) {
       return done(null, false, { message: "User not found" })
     }    
 
-    bcrypt.compare(password, teacher.passwordHash).then(function(res) {       
-      return done(null, teacher)    
-    }).catch(function(err){
+    bcrypt.compare(password, user.passwordHash).then(function(res) {             
+      return done(null, user);    
+    }).catch(function(err){    
       done(null, false, { message: "Password incorrect" })
     });    
   }).catch(function(err) {    
@@ -86,19 +82,30 @@ app.post("/login", passport.authenticate('local', {
   failureFlash: true
 }));
 
-app.post("/teacher", teachers.create)
+app.post("/user", users.create)
+app.post("/user/create_teacher_student", users.createTeacherStudent)
+app.post("/user/create_app_creator", users.createTeacherStudent)
 
 app.get("/login", function(req, res) {    
   res.render("login", { message: "fix me" });
   // res.render("login", { message: req.flash("error") });
 })
 
-app.get("/teacher/create", function(req, res) {
+app.get("/user/create", function(req, res) {
   res.render("create-teacher");
 })
 
+app.get("/user", function(req, res) {
+  user = req.user;
+  if (!user) {
+    return res.redirect("/login")
+  }
+
+  res.render("user-profile")
+})
+
 app.get("/", function(req, res) {
-  user = req.user;  
+  user = req.user;    
   if (!user) {
     return res.redirect("/login")
   }
@@ -109,3 +116,6 @@ app.get("/", function(req, res) {
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+
+exports.app = app;
+exports.db = db;
